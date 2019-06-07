@@ -8,7 +8,9 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController () <UITableViewDelegate,UITableViewDataSource>
+
+@property (strong,nonatomic) UITableView *table;
 @property (nonatomic, strong) CNContactStore *contactsStore;
 @property (nonatomic, strong) NSMutableArray *contacts;
 @end
@@ -17,7 +19,32 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
+    
+    self.table = [UITableView new];
+    [self.view addSubview:self.table];
+    self.table.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    if (@available(iOS 11.0, *)) {
+        [NSLayoutConstraint activateConstraints:@[
+                                                  [self.table.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+                                                  [self.table.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+                                                  [self.table.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+                                                  [self.table.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor]
+                                                  ]
+         ];
+    } else {
+        [NSLayoutConstraint activateConstraints:@[
+                                                  [self.table.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+                                                  [self.table.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+                                                  [self.table.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+                                                  [self.table.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
+                                                  ]
+         ];
+    }
+    
+    self.table.delegate = self;
+    self.table.dataSource = self;
+    
     self.contactsStore = [[CNContactStore alloc] init];
     self.contacts = [NSMutableArray new];
     [self fetchAllContacts];
@@ -75,5 +102,29 @@
     }
 }
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.contacts.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *cellIdentifier = @"cellIdentifier";
+    
+    UITableViewCell *cell = [self.table dequeueReusableCellWithIdentifier:cellIdentifier];
+    Contact *contact = (Contact *) self.contacts[indexPath.row];
+    
+    if(cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        
+    }
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", contact.firstName, contact.lastName];
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+}
 
 @end
