@@ -12,13 +12,25 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
+}
 
-    // Configure the view for the selected state
+- (void)displayContactInfo {
+    self.fullNameLabel.text = [NSString stringWithFormat:@"%@ %@", self.contact.firstName, self.contact.lastName];
+    self.infoIcon.image = [UIImage imageNamed:@"infoIcon"];
+    self.infoIcon.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer *tap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleInfoIconTap:)];
+    [self.infoIcon addGestureRecognizer:tap];
+}
+
+- (void)handleInfoIconTap:(UITapGestureRecognizer *)recognizer {
+    [self.delegate showInfoControllerWithContact:self.contact];
 }
 
 @end

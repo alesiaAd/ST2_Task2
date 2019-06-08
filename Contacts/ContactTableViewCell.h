@@ -7,10 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Contact.h"
+
+@class ContactTableViewCell;
+@protocol ContactTableViewCellDelegate <NSObject>
+
+- (void) showInfoControllerWithContact: (Contact *)contact;
+
+@end
 
 @interface ContactTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *fullNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *infoIcon;
+@property (nonatomic, strong) Contact *contact;
+
+@property (nonatomic, weak) id <ContactTableViewCellDelegate> delegate;
+
+- (void) displayContactInfo;
 
 @end
 

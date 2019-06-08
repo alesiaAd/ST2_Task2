@@ -10,13 +10,14 @@
 #import "ContactTableViewCell.h"
 #import "ContactInfoViewController.h"
 
-@interface ViewController () <UITableViewDelegate,UITableViewDataSource>
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource, ContactTableViewCellDelegate>
 
 @property (strong,nonatomic) UITableView *table;
 @property (nonatomic, strong) CNContactStore *contactsStore;
 @property (nonatomic, strong) NSMutableArray *contacts;
 @property (nonatomic, strong) NSDictionary *contactsDictionary;
 @property (nonatomic, strong) NSArray *dictionaryKeys;
+@property (nonatomic, strong) Contact *contact;
 @end
 
 @implementation ViewController
@@ -171,11 +172,13 @@
     NSArray *sectionContacts = [self.contactsDictionary objectForKey:sectionTitle];
     Contact *contact = [sectionContacts objectAtIndex:indexPath.row];
     
-    cell.fullNameLabel.text = [NSString stringWithFormat:@"%@ %@", contact.firstName, contact.lastName];
-    cell.infoIcon.image = [UIImage imageNamed:@"infoIcon"];
+    cell.contact = contact;
+    [cell displayContactInfo];
+    cell.delegate = self;
     
     return cell;
 }
+
 
 #pragma mark - Delegate
 
@@ -193,6 +196,14 @@
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:nil];
     [alert addAction:okAction];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+#pragma mark - ContactTableViewCellDelegate
+
+-(void)showInfoControllerWithContact:(Contact *)contact {
+    ContactInfoViewController *vc = [[ContactInfoViewController alloc] initWithNibName:@"ContactInfoViewController" bundle:nil];
+    vc.contact = contact;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end
