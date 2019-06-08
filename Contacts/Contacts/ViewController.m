@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "ContactTableViewCell.h"
+#import "ContactInfoViewController.h"
 
 @interface ViewController () <UITableViewDelegate,UITableViewDataSource>
 
@@ -184,6 +185,14 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *sectionTitle = [self.dictionaryKeys objectAtIndex:indexPath.section];
+    NSArray *sectionContacts = [self.contactsDictionary objectForKey:sectionTitle];
+    Contact *contact = [sectionContacts objectAtIndex:indexPath.row];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Alert" message:[NSString stringWithFormat:@"Контакт %@ %@, номер телефона %@", contact.firstName, contact.lastName, contact.phoneNumbers[0]] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:okAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end
