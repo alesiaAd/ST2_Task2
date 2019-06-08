@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "ContactTableViewCell.h"
 
 @interface ViewController () <UITableViewDelegate,UITableViewDataSource>
 
@@ -44,6 +45,9 @@
     
     self.table.delegate = self;
     self.table.dataSource = self;
+    
+    UINib *nib = [UINib nibWithNibName:@"ContactTableViewCell" bundle:nil];
+    [self.table registerNib:nib forCellReuseIdentifier:@"ContactTableViewCell"];
     
     self.contactsStore = [[CNContactStore alloc] init];
     self.contacts = [NSMutableArray new];
@@ -102,6 +106,8 @@
     }
 }
 
+#pragma mark - DataSource
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
@@ -111,16 +117,17 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellIdentifier = @"cellIdentifier";
+    static NSString *cellIdentifier = @"ContactTableViewCell";
     
-    UITableViewCell *cell = [self.table dequeueReusableCellWithIdentifier:cellIdentifier];
+    ContactTableViewCell *cell = (ContactTableViewCell *)[self.table dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     Contact *contact = (Contact *) self.contacts[indexPath.row];
     
     if(cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = (ContactTableViewCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", contact.firstName, contact.lastName];
+    cell.fullNameLabel.text = [NSString stringWithFormat:@"%@ %@", contact.firstName, contact.lastName];
+    cell.infoIcon.image = [UIImage imageNamed:@"infoIcon"];
     return cell;
 }
 

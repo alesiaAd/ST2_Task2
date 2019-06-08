@@ -18,6 +18,8 @@
 		F8541DB622AA890500099870 /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8541DB522AA890500099870 /* Contacts.framework */; };
 		F8541DB822AA890F00099870 /* ContactsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8541DB722AA890F00099870 /* ContactsUI.framework */; };
 		F8541DBB22AAACBD00099870 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = F8541DBA22AAACBD00099870 /* Contact.m */; };
+		F8541DC222ABC7C400099870 /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8541DC022ABC7C400099870 /* ContactTableViewCell.m */; };
+		F8541DC322ABC7C400099870 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8541DC122ABC7C400099870 /* ContactTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +60,9 @@
 		F8541DB722AA890F00099870 /* ContactsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ContactsUI.framework; path = System/Library/Frameworks/ContactsUI.framework; sourceTree = SDKROOT; };
 		F8541DB922AAACBD00099870 /* Contact.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		F8541DBA22AAACBD00099870 /* Contact.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
+		F8541DBF22ABC7C400099870 /* ContactTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ContactTableViewCell.h; path = ../ContactTableViewCell.h; sourceTree = "<group>"; };
+		F8541DC022ABC7C400099870 /* ContactTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ContactTableViewCell.m; path = ../ContactTableViewCell.m; sourceTree = "<group>"; };
+		F8541DC122ABC7C400099870 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ContactTableViewCell.xib; path = ../ContactTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +127,9 @@
 				F8541D8D22AA885400099870 /* LaunchScreen.storyboard */,
 				F8541D9022AA885400099870 /* Info.plist */,
 				F8541D9122AA885400099870 /* main.m */,
+				F8541DBF22ABC7C400099870 /* ContactTableViewCell.h */,
+				F8541DC022ABC7C400099870 /* ContactTableViewCell.m */,
+				F8541DC122ABC7C400099870 /* ContactTableViewCell.xib */,
 			);
 			path = Contacts;
 			sourceTree = "<group>";
@@ -256,6 +264,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8541DC322ABC7C400099870 /* ContactTableViewCell.xib in Resources */,
 				F8541D8F22AA885400099870 /* LaunchScreen.storyboard in Resources */,
 				F8541D8C22AA885400099870 /* Assets.xcassets in Resources */,
 				F8541D8A22AA885300099870 /* Main.storyboard in Resources */,
@@ -285,6 +294,7 @@
 			files = (
 				F8541DBB22AAACBD00099870 /* Contact.m in Sources */,
 				F8541D8722AA885200099870 /* ViewController.m in Sources */,
+				F8541DC222ABC7C400099870 /* ContactTableViewCell.m in Sources */,
 				F8541D9222AA885400099870 /* main.m in Sources */,
 				F8541D8422AA885200099870 /* AppDelegate.m in Sources */,
 			);
