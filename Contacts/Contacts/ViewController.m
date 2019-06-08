@@ -14,12 +14,16 @@
 @property (strong,nonatomic) UITableView *table;
 @property (nonatomic, strong) CNContactStore *contactsStore;
 @property (nonatomic, strong) NSMutableArray *contacts;
+@property (nonatomic, strong) NSDictionary *contactsDictionary;
+@property (nonatomic, strong) NSArray *dictionaryKeys;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.title = @"Контакты";
     
     self.table = [UITableView new];
     [self.view addSubview:self.table];
@@ -52,9 +56,11 @@
     self.contactsStore = [[CNContactStore alloc] init];
     self.contacts = [NSMutableArray new];
     [self fetchAllContacts];
+    self.contactsDictionary = [self makeDictionaryFromArray:self.contacts];
+    self.dictionaryKeys = [self.contactsDictionary allKeys];
 }
 
--(void)fetchAllContacts{
+- (void)fetchAllContacts {
     
     [self requestContactsAccessWithHandler:^(BOOL grandted) {
         
@@ -86,7 +92,7 @@
     }];
 }
 
--(void)requestContactsAccessWithHandler:(void (^)(BOOL grandted))handler{
+- (void)requestContactsAccessWithHandler:(void (^)(BOOL grandted))handler {
     
     switch ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts]) {
         case CNAuthorizationStatusAuthorized:
@@ -106,29 +112,75 @@
     }
 }
 
+- (NSDictionary *)makeDictionaryFromArray:(NSMutableArray *)array {
+    NSMutableDictionary *dictionary = [NSMutableDictionary new];
+    for (Contact *contact in array) {
+        NSArray *keys = [dictionary allKeys];
+        NSString *newKey = [NSString new];
+        if (contact.lastName.length > 0 && [[NSCharacterSet letterCharacterSet] characterIsMember: [contact.lastName characterAtIndex:0]] == YES) {
+            newKey = [contact.lastName substringToIndex:1];
+        }
+        else if (contact.firstName.length > 0 && [[NSCharacterSet letterCharacterSet] characterIsMember: [contact.firstName characterAtIndex:0]] == YES) {
+            newKey = [contact.firstName substringToIndex:1];
+        }
+        else {
+            newKey = @"#";
+        }
+        if (keys.count == 0) {
+            [dictionary setObject:[NSMutableArray new] forKey:newKey];
+            [[dictionary objectForKey:newKey] addObject:contact];
+        }
+        for (NSString *key in keys) {
+            if ([key isEqualToString:newKey]) {
+                [[dictionary objectForKey:newKey] addObject:contact];
+                break;
+            }
+            else if ([keys indexOfObject:key] == keys.count - 1) {
+                [dictionary setObject:[NSMutableArray new] forKey:newKey];
+                [[dictionary objectForKey:newKey] addObject:contact];
+            }
+        }
+    }
+    return [dictionary copy];
+}
+
 #pragma mark - DataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return self.contactsDictionary.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.contacts.count;
+    NSString *sectionTitle = [self.dictionaryKeys objectAtIndex:section];
+    NSArray *sectionContacts = [self.contactsDictionary objectForKey:sectionTitle];
+    return [sectionContacts count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIdentifier = @"ContactTableViewCell";
     
     ContactTableViewCell *cell = (ContactTableViewCell *)[self.table dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
-    Contact *contact = (Contact *) self.contacts[indexPath.row];
     
     if(cell == nil) {
         cell = (ContactTableViewCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         
     }
+    
+    NSString *sectionTitle = [self.dictionaryKeys objectAtIndex:indexPath.section];
+    NSArray *sectionContacts = [self.contactsDictionary objectForKey:sectionTitle];
+    Contact *contact = [sectionContacts objectAtIndex:indexPath.row];
+    
     cell.fullNameLabel.text = [NSString stringWithFormat:@"%@ %@", contact.firstName, contact.lastName];
     cell.infoIcon.image = [UIImage imageNamed:@"infoIcon"];
+    
     return cell;
+}
+
+#pragma mark - Delegate
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [self.dictionaryKeys objectAtIndex:section];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
