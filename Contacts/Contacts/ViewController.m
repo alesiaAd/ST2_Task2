@@ -269,11 +269,35 @@
     Section *section = (Section *)self.sections[recognizer.view.tag];
     if (section.expanded) {
         section.expanded = NO;
+        NSMutableArray *paths = [NSMutableArray array];
+        for (NSInteger i = 0; i < section.contacts.count; i++) {
+            NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:recognizer.view.tag];
+            [paths addObject:path];
+        }
+        [self.table deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+        
     }
     else {
         section.expanded = YES;
+        NSMutableArray *paths = [NSMutableArray array];
+        for (NSInteger i = 0; i < section.contacts.count; i++) {
+            NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:recognizer.view.tag];
+            [paths addObject:path];
+        }
+        [self.table insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
     }
-    [self.table reloadData];
+}
+
+- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"Delete" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+        Section *section = (Section *)self.sections[indexPath.section];
+        [section.contacts removeObjectAtIndex:indexPath.row];
+        [self.table reloadData];
+    }];
+    
+    UISwipeActionsConfiguration *configuraion = [UISwipeActionsConfiguration configurationWithActions:@[deleteAction]];
+    configuraion.performsFirstActionWithFullSwipe = NO;
+    return configuraion;
 }
 
 #pragma mark - ContactTableViewCellDelegate
