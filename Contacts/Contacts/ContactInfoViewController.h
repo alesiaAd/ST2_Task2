@@ -10,6 +10,7 @@
 #import "Contact.h"
 
 @interface ContactInfoViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @property (weak, nonatomic) IBOutlet UIImageView *contactImage;
 @property (weak, nonatomic) IBOutlet UILabel *fullNameLabel;

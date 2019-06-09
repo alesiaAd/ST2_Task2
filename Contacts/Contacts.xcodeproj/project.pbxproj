@@ -23,6 +23,7 @@
 		F8541DC722ABF28100099870 /* ContactInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8541DC522ABF28100099870 /* ContactInfoViewController.m */; };
 		F8541DC822ABF28100099870 /* ContactInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8541DC622ABF28100099870 /* ContactInfoViewController.xib */; };
 		F8541DCB22ACFB2600099870 /* PhoneTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8541DCA22ACFB2600099870 /* PhoneTableViewCell.m */; };
+		F8541DCE22AD229700099870 /* Section.m in Sources */ = {isa = PBXBuildFile; fileRef = F8541DCD22AD229700099870 /* Section.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,8 @@
 		F8541DC622ABF28100099870 /* ContactInfoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactInfoViewController.xib; sourceTree = "<group>"; };
 		F8541DC922ACFB2600099870 /* PhoneTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhoneTableViewCell.h; sourceTree = "<group>"; };
 		F8541DCA22ACFB2600099870 /* PhoneTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhoneTableViewCell.m; sourceTree = "<group>"; };
+		F8541DCC22AD229700099870 /* Section.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Section.h; sourceTree = "<group>"; };
+		F8541DCD22AD229700099870 /* Section.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Section.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,10 +129,12 @@
 			children = (
 				F8541DC422ABF28100099870 /* ContactInfoViewController.h */,
 				F8541DC522ABF28100099870 /* ContactInfoViewController.m */,
+				F8541DC622ABF28100099870 /* ContactInfoViewController.xib */,
 				F8541DC922ACFB2600099870 /* PhoneTableViewCell.h */,
 				F8541DCA22ACFB2600099870 /* PhoneTableViewCell.m */,
-				F8541DC622ABF28100099870 /* ContactInfoViewController.xib */,
 				F8541DB922AAACBD00099870 /* Contact.h */,
+				F8541DCC22AD229700099870 /* Section.h */,
+				F8541DCD22AD229700099870 /* Section.m */,
 				F8541DBA22AAACBD00099870 /* Contact.m */,
 				F8541D8222AA885200099870 /* AppDelegate.h */,
 				F8541D8322AA885200099870 /* AppDelegate.m */,
@@ -307,6 +312,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8541DBB22AAACBD00099870 /* Contact.m in Sources */,
+				F8541DCE22AD229700099870 /* Section.m in Sources */,
 				F8541D8722AA885200099870 /* ViewController.m in Sources */,
 				F8541DC222ABC7C400099870 /* ContactTableViewCell.m in Sources */,
 				F8541DCB22ACFB2600099870 /* PhoneTableViewCell.m in Sources */,

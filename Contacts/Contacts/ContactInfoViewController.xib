@@ -14,6 +14,7 @@
             <connections>
                 <outlet property="contactImage" destination="Uin-lS-tLh" id="Hr9-yI-t2I"/>
                 <outlet property="fullNameLabel" destination="6je-rC-H7y" id="258-uF-jIa"/>
+                <outlet property="scrollView" destination="Gtw-gQ-YHc" id="d2y-1u-m0n"/>
                 <outlet property="tableView" destination="iRi-c7-2nx" id="su2-Ac-xxr"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>

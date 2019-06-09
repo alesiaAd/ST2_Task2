@@ -9,15 +9,14 @@
 #import "ViewController.h"
 #import "ContactTableViewCell.h"
 #import "ContactInfoViewController.h"
+#import "Section.h"
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource, ContactTableViewCellDelegate>
 
 @property (strong,nonatomic) UITableView *table;
 @property (nonatomic, strong) CNContactStore *contactsStore;
 @property (nonatomic, strong) NSMutableArray *contacts;
-@property (nonatomic, strong) NSDictionary *contactsDictionary;
-@property (nonatomic, strong) NSArray *dictionaryKeys;
-@property (nonatomic, strong) Contact *contact;
+@property (nonatomic, strong) NSArray *sections;
 @end
 
 @implementation ViewController
@@ -58,8 +57,8 @@
     self.contactsStore = [[CNContactStore alloc] init];
     self.contacts = [NSMutableArray new];
     [self fetchAllContacts];
-    self.contactsDictionary = [self makeDictionaryFromArray:self.contacts];
-    self.dictionaryKeys = [self.contactsDictionary allKeys];
+
+    self.sections = [self makeArrayOfSections:self.contacts];
 }
 
 - (void)fetchAllContacts {
@@ -114,10 +113,9 @@
     }
 }
 
-- (NSDictionary *)makeDictionaryFromArray:(NSMutableArray *)array {
-    NSMutableDictionary *dictionary = [NSMutableDictionary new];
+- (NSArray *)makeArrayOfSections:(NSArray *)array {
+    NSMutableArray *arrayOfSections = [NSMutableArray new];
     for (Contact *contact in array) {
-        NSArray *keys = [dictionary allKeys];
         NSString *newKey = [NSString new];
         if (contact.lastName.length > 0 && [[NSCharacterSet letterCharacterSet] characterIsMember: [contact.lastName characterAtIndex:0]] == YES) {
             newKey = [contact.lastName substringToIndex:1];
@@ -128,34 +126,41 @@
         else {
             newKey = @"#";
         }
-        if (keys.count == 0) {
-            [dictionary setObject:[NSMutableArray new] forKey:newKey];
-            [[dictionary objectForKey:newKey] addObject:contact];
+        if (arrayOfSections.count == 0) {
+            Section *section = [Section new];
+            section.title = newKey;
+            section.expanded = YES;
+            section.contacts = [NSMutableArray new];
+            [section.contacts addObject:contact];
+            [arrayOfSections addObject:section];
         }
-        for (NSString *key in keys) {
-            if ([key isEqualToString:newKey]) {
-                [[dictionary objectForKey:newKey] addObject:contact];
+        for (Section *sectionItem in arrayOfSections) {
+            if ([sectionItem.title isEqualToString:newKey]) {
+                [sectionItem.contacts addObject:contact];
                 break;
             }
-            else if ([keys indexOfObject:key] == keys.count - 1) {
-                [dictionary setObject:[NSMutableArray new] forKey:newKey];
-                [[dictionary objectForKey:newKey] addObject:contact];
+            else if ([arrayOfSections indexOfObject:sectionItem] == arrayOfSections.count - 1) {
+                Section *section = [Section new];
+                section.title = newKey;
+                section.expanded = YES;
+                section.contacts = [NSMutableArray new];
+                [section.contacts addObject:contact];
+                [arrayOfSections addObject:section];
             }
         }
     }
-    return [dictionary copy];
+    return [arrayOfSections copy];
 }
 
 #pragma mark - DataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.contactsDictionary.count;
+    return self.sections.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSString *sectionTitle = [self.dictionaryKeys objectAtIndex:section];
-    NSArray *sectionContacts = [self.contactsDictionary objectForKey:sectionTitle];
-    return [sectionContacts count];
+    Section *sect = (Section *)self.sections[section];
+    return [sect.contacts count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -167,10 +172,8 @@
         cell = (ContactTableViewCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         
     }
-    
-    NSString *sectionTitle = [self.dictionaryKeys objectAtIndex:indexPath.section];
-    NSArray *sectionContacts = [self.contactsDictionary objectForKey:sectionTitle];
-    Contact *contact = [sectionContacts objectAtIndex:indexPath.row];
+    Section *section = (Section *)self.sections[indexPath.section];
+    Contact *contact = section.contacts[indexPath.row];
     
     cell.contact = contact;
     [cell displayContactInfo];
@@ -179,18 +182,17 @@
     return cell;
 }
 
-
 #pragma mark - Delegate
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [self.dictionaryKeys objectAtIndex:section];
+    Section *sect = (Section *)self.sections[section];
+    return sect.title;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *sectionTitle = [self.dictionaryKeys objectAtIndex:indexPath.section];
-    NSArray *sectionContacts = [self.contactsDictionary objectForKey:sectionTitle];
-    Contact *contact = [sectionContacts objectAtIndex:indexPath.row];
+    Section *section = (Section *)self.sections[indexPath.section];
+    Contact *contact = section.contacts[indexPath.row];
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Alert" message:[NSString stringWithFormat:@"Контакт %@ %@, номер телефона %@", contact.firstName, contact.lastName, contact.phoneNumbers[0]] preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:nil];

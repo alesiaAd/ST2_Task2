@@ -34,6 +34,8 @@
     self.tableView.dataSource = self;
     
     [self.tableView registerClass:[PhoneTableViewCell class] forCellReuseIdentifier:@"PhoneTableViewCell"];
+    
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
 }
 
 #pragma mark - DataSource
