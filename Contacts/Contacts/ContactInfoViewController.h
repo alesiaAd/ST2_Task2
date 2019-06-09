@@ -11,6 +11,10 @@
 
 @interface ContactInfoViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIImageView *contactImage;
+@property (weak, nonatomic) IBOutlet UILabel *fullNameLabel;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+
 @property (nonatomic, strong) Contact *contact;
 
 @end

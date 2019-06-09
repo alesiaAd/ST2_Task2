@@ -16,6 +16,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if (self.contact.contactImage) {
+        self.contactImage.image = self.contact.contactImage;
+        self.contactImage.contentMode = UIViewContentModeScaleAspectFill;
+        self.contactImage.layer.cornerRadius = self.contactImage.frame.size.width / 2;
+        self.contactImage.clipsToBounds = YES;
+    }
+    else {
+        self.contactImage.image = [UIImage imageNamed:@"noPhotoImage"];
+    }
+    
+    self.fullNameLabel.text = [NSString stringWithFormat:@"%@ %@", self.contact.firstName, self.contact.lastName];
 }
 
 /*
