@@ -24,6 +24,7 @@
 		F8541DC822ABF28100099870 /* ContactInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8541DC622ABF28100099870 /* ContactInfoViewController.xib */; };
 		F8541DCB22ACFB2600099870 /* PhoneTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8541DCA22ACFB2600099870 /* PhoneTableViewCell.m */; };
 		F8541DCE22AD229700099870 /* Section.m in Sources */ = {isa = PBXBuildFile; fileRef = F8541DCD22AD229700099870 /* Section.m */; };
+		F8541DD722ADAB8B00099870 /* PhotoAndNameTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8541DD622ADAB8B00099870 /* PhotoAndNameTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,16 +65,18 @@
 		F8541DB722AA890F00099870 /* ContactsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ContactsUI.framework; path = System/Library/Frameworks/ContactsUI.framework; sourceTree = SDKROOT; };
 		F8541DB922AAACBD00099870 /* Contact.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		F8541DBA22AAACBD00099870 /* Contact.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
-		F8541DBF22ABC7C400099870 /* ContactTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ContactTableViewCell.h; path = ../ContactTableViewCell.h; sourceTree = "<group>"; };
-		F8541DC022ABC7C400099870 /* ContactTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ContactTableViewCell.m; path = ../ContactTableViewCell.m; sourceTree = "<group>"; };
-		F8541DC122ABC7C400099870 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ContactTableViewCell.xib; path = ../ContactTableViewCell.xib; sourceTree = "<group>"; };
-		F8541DC422ABF28100099870 /* ContactInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactInfoViewController.h; sourceTree = "<group>"; };
-		F8541DC522ABF28100099870 /* ContactInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfoViewController.m; sourceTree = "<group>"; };
-		F8541DC622ABF28100099870 /* ContactInfoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactInfoViewController.xib; sourceTree = "<group>"; };
+		F8541DBF22ABC7C400099870 /* ContactTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableViewCell.h; sourceTree = "<group>"; };
+		F8541DC022ABC7C400099870 /* ContactTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewCell.m; sourceTree = "<group>"; };
+		F8541DC122ABC7C400099870 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactTableViewCell.xib; sourceTree = "<group>"; };
+		F8541DC422ABF28100099870 /* ContactInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ContactInfoViewController.h; path = ../ContactInfoViewController.h; sourceTree = "<group>"; };
+		F8541DC522ABF28100099870 /* ContactInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ContactInfoViewController.m; path = ../ContactInfoViewController.m; sourceTree = "<group>"; };
+		F8541DC622ABF28100099870 /* ContactInfoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ContactInfoViewController.xib; path = ../ContactInfoViewController.xib; sourceTree = "<group>"; };
 		F8541DC922ACFB2600099870 /* PhoneTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhoneTableViewCell.h; sourceTree = "<group>"; };
 		F8541DCA22ACFB2600099870 /* PhoneTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhoneTableViewCell.m; sourceTree = "<group>"; };
 		F8541DCC22AD229700099870 /* Section.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Section.h; sourceTree = "<group>"; };
 		F8541DCD22AD229700099870 /* Section.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Section.m; sourceTree = "<group>"; };
+		F8541DD522ADAB8B00099870 /* PhotoAndNameTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoAndNameTableViewCell.h; sourceTree = "<group>"; };
+		F8541DD622ADAB8B00099870 /* PhotoAndNameTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoAndNameTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,27 +130,22 @@
 		F8541D8122AA885200099870 /* Contacts */ = {
 			isa = PBXGroup;
 			children = (
-				F8541DC422ABF28100099870 /* ContactInfoViewController.h */,
-				F8541DC522ABF28100099870 /* ContactInfoViewController.m */,
-				F8541DC622ABF28100099870 /* ContactInfoViewController.xib */,
-				F8541DC922ACFB2600099870 /* PhoneTableViewCell.h */,
-				F8541DCA22ACFB2600099870 /* PhoneTableViewCell.m */,
-				F8541DB922AAACBD00099870 /* Contact.h */,
-				F8541DCC22AD229700099870 /* Section.h */,
-				F8541DCD22AD229700099870 /* Section.m */,
-				F8541DBA22AAACBD00099870 /* Contact.m */,
+				F8541DD822ADABB200099870 /* PhotoAndNameTableViewCell */,
+				F8541DD522ADAB8B00099870 /* PhotoAndNameTableViewCell.h */,
+				F8541DD622ADAB8B00099870 /* PhotoAndNameTableViewCell.m */,
+				F8541DD122ADA8D500099870 /* Contact */,
+				F8541DD222ADA8F600099870 /* Section */,
+				F8541DD322ADA94D00099870 /* ViewController */,
+				F8541DD422ADA96D00099870 /* ContactsTableViewCell */,
+				F8541DCF22AD67E700099870 /* ContactInfoViewController */,
+				F8541DD022ADA8AD00099870 /* PhoneTableViewCell */,
 				F8541D8222AA885200099870 /* AppDelegate.h */,
 				F8541D8322AA885200099870 /* AppDelegate.m */,
-				F8541D8522AA885200099870 /* ViewController.h */,
-				F8541D8622AA885200099870 /* ViewController.m */,
 				F8541D8822AA885300099870 /* Main.storyboard */,
 				F8541D8B22AA885400099870 /* Assets.xcassets */,
 				F8541D8D22AA885400099870 /* LaunchScreen.storyboard */,
 				F8541D9022AA885400099870 /* Info.plist */,
 				F8541D9122AA885400099870 /* main.m */,
-				F8541DBF22ABC7C400099870 /* ContactTableViewCell.h */,
-				F8541DC022ABC7C400099870 /* ContactTableViewCell.m */,
-				F8541DC122ABC7C400099870 /* ContactTableViewCell.xib */,
 			);
 			path = Contacts;
 			sourceTree = "<group>";
@@ -177,6 +175,69 @@
 				F8541DB522AA890500099870 /* Contacts.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F8541DCF22AD67E700099870 /* ContactInfoViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F8541DC422ABF28100099870 /* ContactInfoViewController.h */,
+				F8541DC522ABF28100099870 /* ContactInfoViewController.m */,
+				F8541DC622ABF28100099870 /* ContactInfoViewController.xib */,
+			);
+			path = ContactInfoViewController;
+			sourceTree = "<group>";
+		};
+		F8541DD022ADA8AD00099870 /* PhoneTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				F8541DC922ACFB2600099870 /* PhoneTableViewCell.h */,
+				F8541DCA22ACFB2600099870 /* PhoneTableViewCell.m */,
+			);
+			path = PhoneTableViewCell;
+			sourceTree = "<group>";
+		};
+		F8541DD122ADA8D500099870 /* Contact */ = {
+			isa = PBXGroup;
+			children = (
+				F8541DB922AAACBD00099870 /* Contact.h */,
+				F8541DBA22AAACBD00099870 /* Contact.m */,
+			);
+			path = Contact;
+			sourceTree = "<group>";
+		};
+		F8541DD222ADA8F600099870 /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				F8541DCC22AD229700099870 /* Section.h */,
+				F8541DCD22AD229700099870 /* Section.m */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
+		F8541DD322ADA94D00099870 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F8541D8522AA885200099870 /* ViewController.h */,
+				F8541D8622AA885200099870 /* ViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		F8541DD422ADA96D00099870 /* ContactsTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				F8541DBF22ABC7C400099870 /* ContactTableViewCell.h */,
+				F8541DC022ABC7C400099870 /* ContactTableViewCell.m */,
+				F8541DC122ABC7C400099870 /* ContactTableViewCell.xib */,
+			);
+			path = ContactsTableViewCell;
+			sourceTree = "<group>";
+		};
+		F8541DD822ADABB200099870 /* PhotoAndNameTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = PhotoAndNameTableViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -314,6 +375,7 @@
 				F8541DBB22AAACBD00099870 /* Contact.m in Sources */,
 				F8541DCE22AD229700099870 /* Section.m in Sources */,
 				F8541D8722AA885200099870 /* ViewController.m in Sources */,
+				F8541DD722ADAB8B00099870 /* PhotoAndNameTableViewCell.m in Sources */,
 				F8541DC222ABC7C400099870 /* ContactTableViewCell.m in Sources */,
 				F8541DCB22ACFB2600099870 /* PhoneTableViewCell.m in Sources */,
 				F8541D9222AA885400099870 /* main.m in Sources */,

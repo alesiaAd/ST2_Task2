@@ -13,7 +13,8 @@
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource, ContactTableViewCellDelegate>
 
-@property (strong,nonatomic) UITableView *table;
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UIView *warningView;
 @property (nonatomic, strong) CNContactStore *contactsStore;
 @property (nonatomic, strong) NSMutableArray *contacts;
 @property (nonatomic, strong) NSArray *sections;
@@ -26,33 +27,74 @@
     
     self.title = @"Контакты";
     
-    self.table = [UITableView new];
-    [self.view addSubview:self.table];
-    self.table.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    self.warningView = [UIView new];
+    self.warningView.backgroundColor = [UIColor grayColor];
+    [self.view addSubview:self.warningView];
+    self.warningView.translatesAutoresizingMaskIntoConstraints = NO;
     
     if (@available(iOS 11.0, *)) {
         [NSLayoutConstraint activateConstraints:@[
-                                                  [self.table.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
-                                                  [self.table.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
-                                                  [self.table.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
-                                                  [self.table.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor]
+                                                  [self.warningView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+                                                  [self.warningView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+                                                  [self.warningView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+                                                  [self.warningView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor]
                                                   ]
          ];
     } else {
         [NSLayoutConstraint activateConstraints:@[
-                                                  [self.table.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-                                                  [self.table.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-                                                  [self.table.topAnchor constraintEqualToAnchor:self.view.topAnchor],
-                                                  [self.table.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
+                                                  [self.warningView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+                                                  [self.warningView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+                                                  [self.warningView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+                                                  [self.warningView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
                                                   ]
          ];
     }
     
-    self.table.delegate = self;
-    self.table.dataSource = self;
+    UILabel *warningLabel = [UILabel new];
+    warningLabel.textColor = [UIColor blackColor];
+    warningLabel.numberOfLines = 0;
+    [warningLabel sizeToFit];
+    warningLabel.text = @"Доступ к списку контактов запрещен. Войдите в Settings и разрешите доступ.";
+    warningLabel.textAlignment = NSTextAlignmentCenter;
+    [self.warningView addSubview:warningLabel];
+    warningLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [NSLayoutConstraint activateConstraints:@[
+                                              [warningLabel.leadingAnchor constraintEqualToAnchor:self.warningView.leadingAnchor constant:50],
+                                              [warningLabel.trailingAnchor constraintEqualToAnchor:self.warningView.trailingAnchor constant:-50],
+                                              [warningLabel.centerYAnchor constraintEqualToAnchor:self.warningView.centerYAnchor]
+                                               ]
+     ];
+    
+    self.tableView = [UITableView new];
+    [self.view addSubview:self.tableView];
+    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    if (@available(iOS 11.0, *)) {
+        [NSLayoutConstraint activateConstraints:@[
+                                                  [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+                                                  [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+                                                  [self.tableView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+                                                  [self.tableView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor]
+                                                  ]
+         ];
+    } else {
+        [NSLayoutConstraint activateConstraints:@[
+                                                  [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+                                                  [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+                                                  [self.tableView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+                                                  [self.tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
+                                                  ]
+         ];
+    }
+    
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     
     UINib *nib = [UINib nibWithNibName:@"ContactTableViewCell" bundle:nil];
-    [self.table registerNib:nib forCellReuseIdentifier:@"ContactTableViewCell"];
+    [self.tableView registerNib:nib forCellReuseIdentifier:@"ContactTableViewCell"];
     
     self.contactsStore = [[CNContactStore alloc] init];
     self.contacts = [NSMutableArray new];
@@ -66,7 +108,6 @@
     [self requestContactsAccessWithHandler:^(BOOL grandted) {
         
         if (grandted) {
-            
             CNContactFetchRequest *request = [[CNContactFetchRequest alloc] initWithKeysToFetch:@[CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPhoneNumbersKey, CNContactImageDataKey]];
             [self.contactsStore enumerateContactsWithFetchRequest:request error:nil usingBlock:^(CNContact * _Nonnull contact, BOOL * _Nonnull stop) {
                 
@@ -95,19 +136,31 @@
 
 - (void)requestContactsAccessWithHandler:(void (^)(BOOL grandted))handler {
     
+    __block BOOL accessGranted = NO;
     switch ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts]) {
         case CNAuthorizationStatusAuthorized:
+            accessGranted = YES;
+            [self.tableView setHidden:NO];
+            [self.warningView setHidden:YES];
             handler(YES);
             break;
-        case CNAuthorizationStatusDenied:
+        case CNAuthorizationStatusDenied:{
+            accessGranted = NO;
+            [self.tableView setHidden:YES];
+            [self.warningView setHidden:NO];
+            handler(NO);
+            break;
+        }
         case CNAuthorizationStatusNotDetermined:{
             [self.contactsStore requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError * _Nullable error) {
-                
                 handler(granted);
             }];
             break;
         }
         case CNAuthorizationStatusRestricted:
+            accessGranted = NO;
+            [self.tableView setHidden:YES];
+            [self.warningView setHidden:NO];
             handler(NO);
             break;
     }
@@ -173,7 +226,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIdentifier = @"ContactTableViewCell";
     
-    ContactTableViewCell *cell = (ContactTableViewCell *)[self.table dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    ContactTableViewCell *cell = (ContactTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     
     if(cell == nil) {
         cell = (ContactTableViewCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
@@ -221,7 +274,7 @@
     [headerView addSubview:titleLabel];
     
     UILabel *contactsAmountLabel = [UILabel new];
-    contactsAmountLabel.text = [NSString stringWithFormat:@"контактов %lu", (unsigned long)sect.contacts.count];
+    contactsAmountLabel.text = [NSString stringWithFormat:@"контактов: %lu", (unsigned long)sect.contacts.count];
     contactsAmountLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [headerView addSubview:contactsAmountLabel];
     
@@ -274,7 +327,7 @@
             NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:recognizer.view.tag];
             [paths addObject:path];
         }
-        [self.table deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
         
     }
     else {
@@ -284,7 +337,7 @@
             NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:recognizer.view.tag];
             [paths addObject:path];
         }
-        [self.table insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
@@ -292,7 +345,7 @@
     UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"Delete" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
         Section *section = (Section *)self.sections[indexPath.section];
         [section.contacts removeObjectAtIndex:indexPath.row];
-        [self.table reloadData];
+        [self.tableView reloadData];
     }];
     
     UISwipeActionsConfiguration *configuraion = [UISwipeActionsConfiguration configurationWithActions:@[deleteAction]];

@@ -8,6 +8,7 @@
 
 #import "ContactInfoViewController.h"
 #import "PhoneTableViewCell.h"
+#import "PhotoAndNameTableViewCell.h"
 
 @interface ContactInfoViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -18,24 +19,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if (self.contact.contactImage) {
-        self.contactImage.image = self.contact.contactImage;
-        self.contactImage.contentMode = UIViewContentModeScaleAspectFill;
-        self.contactImage.layer.cornerRadius = self.contactImage.frame.size.width / 2;
-        self.contactImage.clipsToBounds = YES;
-    }
-    else {
-        self.contactImage.image = [UIImage imageNamed:@"noPhotoImage"];
-    }
-    
-    self.fullNameLabel.text = [NSString stringWithFormat:@"%@ %@", self.contact.firstName, self.contact.lastName];
-    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
     [self.tableView registerClass:[PhoneTableViewCell class] forCellReuseIdentifier:@"PhoneTableViewCell"];
-    
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
+    [self.tableView registerClass:[PhotoAndNameTableViewCell class] forCellReuseIdentifier:@"PhotoAndNameTableViewCell"];
 }
 
 #pragma mark - DataSource
@@ -45,22 +33,48 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.contact.phoneNumbers.count;
+    return self.contact.phoneNumbers.count + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellIdentifier = @"PhoneTableViewCell";
-    
-    PhoneTableViewCell *cell = (PhoneTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
-    
-    if(cell == nil) {
-        cell = (PhoneTableViewCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    if (indexPath.row == 0) {
+        static NSString *cellIdentifier = @"PhotoAndNameTableViewCell";
         
+        PhotoAndNameTableViewCell *cell = (PhotoAndNameTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+        
+        if(cell == nil) {
+            cell = (PhotoAndNameTableViewCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            
+        }
+        
+        if (self.contact.contactImage) {
+            cell.contactImage.image = self.contact.contactImage;
+            cell.contactImage.contentMode = UIViewContentModeScaleAspectFill;
+            cell.contactImage.layer.cornerRadius = 75;
+            cell.contactImage.clipsToBounds = YES;
+        }
+        else {
+            cell.contactImage.image = [UIImage imageNamed:@"noPhotoImage"];
+        }
+        cell.fullNameLabel.text = [NSString stringWithFormat:@"%@ %@", self.contact.lastName, self.contact.firstName];
+        
+        return cell;
     }
     
-    cell.phoneLabel.text = self.contact.phoneNumbers[indexPath.row];
+    else {
+        static NSString *cellIdentifier = @"PhoneTableViewCell";
     
-    return cell;
+        PhoneTableViewCell *cell = (PhoneTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    
+        if(cell == nil) {
+            cell = (PhoneTableViewCell *)[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        
+        }
+    
+        cell.phoneLabel.text = self.contact.phoneNumbers[indexPath.row - 1];
+        
+        return cell;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
