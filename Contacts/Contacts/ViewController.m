@@ -219,11 +219,43 @@
     titleLabel.text = sect.title;
     titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [headerView addSubview:titleLabel];
+    
+    UILabel *contactsAmountLabel = [UILabel new];
+    contactsAmountLabel.text = [NSString stringWithFormat:@"контактов %lu", (unsigned long)sect.contacts.count];
+    contactsAmountLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [headerView addSubview:contactsAmountLabel];
+    
+    UIImageView *arrowImage =[UIImageView new];
+    if (sect.expanded) {
+        arrowImage.image =[UIImage imageNamed:@"arrowDown"];
+    }
+    else {
+        arrowImage.image =[UIImage imageNamed:@"arrowUp"];
+    }
+    arrowImage.translatesAutoresizingMaskIntoConstraints = NO;
+    [headerView addSubview:arrowImage];
+    
     [NSLayoutConstraint activateConstraints:@[
                                               [titleLabel.leadingAnchor constraintEqualToAnchor:headerView.leadingAnchor constant:20],
-                                              [titleLabel.trailingAnchor constraintEqualToAnchor:headerView.trailingAnchor constant:-20],
+                                              [titleLabel.widthAnchor constraintEqualToConstant:20],
                                               [titleLabel.heightAnchor constraintEqualToConstant:44],
                                               [titleLabel.centerYAnchor constraintEqualToAnchor:headerView.centerYAnchor]
+                                              ]
+     ];
+    
+    [NSLayoutConstraint activateConstraints:@[
+                                              [contactsAmountLabel.leadingAnchor constraintEqualToAnchor:titleLabel.trailingAnchor constant:20],
+                                              [contactsAmountLabel.trailingAnchor constraintEqualToAnchor:arrowImage.leadingAnchor constant:-20],
+                                              [contactsAmountLabel.heightAnchor constraintEqualToAnchor:titleLabel.heightAnchor multiplier:1],
+                                              [contactsAmountLabel.centerYAnchor constraintEqualToAnchor:headerView.centerYAnchor]
+                                              ]
+     ];
+    
+    [NSLayoutConstraint activateConstraints:@[
+                                              [arrowImage.trailingAnchor constraintEqualToAnchor:headerView.trailingAnchor constant:-20],
+                                              [arrowImage.heightAnchor constraintEqualToConstant:20],
+                                              [arrowImage.widthAnchor constraintEqualToAnchor:arrowImage.heightAnchor multiplier:1],
+                                              [arrowImage.centerYAnchor constraintEqualToAnchor:headerView.centerYAnchor]
                                               ]
      ];
     
