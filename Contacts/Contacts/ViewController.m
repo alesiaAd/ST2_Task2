@@ -134,18 +134,20 @@
             [section.contacts addObject:contact];
             [arrayOfSections addObject:section];
         }
-        for (Section *sectionItem in arrayOfSections) {
-            if ([sectionItem.title isEqualToString:newKey]) {
-                [sectionItem.contacts addObject:contact];
-                break;
-            }
-            else if ([arrayOfSections indexOfObject:sectionItem] == arrayOfSections.count - 1) {
-                Section *section = [Section new];
-                section.title = newKey;
-                section.expanded = YES;
-                section.contacts = [NSMutableArray new];
-                [section.contacts addObject:contact];
-                [arrayOfSections addObject:section];
+        else {
+            for (Section *sectionItem in arrayOfSections) {
+                if ([sectionItem.title isEqualToString:newKey]) {
+                    [sectionItem.contacts addObject:contact];
+                    break;
+                }
+                else if ([arrayOfSections indexOfObject:sectionItem] == arrayOfSections.count - 1) {
+                    Section *section = [Section new];
+                    section.title = newKey;
+                    section.expanded = YES;
+                    section.contacts = [NSMutableArray new];
+                    [section.contacts addObject:contact];
+                    [arrayOfSections addObject:section];
+                }
             }
         }
     }
@@ -160,7 +162,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     Section *sect = (Section *)self.sections[section];
-    return [sect.contacts count];
+    if(sect.expanded) {
+        return [sect.contacts count];
+    }
+    else {
+        return 0;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -198,6 +205,43 @@
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:nil];
     [alert addAction:okAction];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sectionTapped:)];
+    
+    Section *sect = (Section *)self.sections[section];
+    
+    UIView *headerView = [UIView new];
+    headerView.backgroundColor = [UIColor lightGrayColor];
+    
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.text = sect.title;
+    titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [headerView addSubview:titleLabel];
+    [NSLayoutConstraint activateConstraints:@[
+                                              [titleLabel.leadingAnchor constraintEqualToAnchor:headerView.leadingAnchor constant:20],
+                                              [titleLabel.trailingAnchor constraintEqualToAnchor:headerView.trailingAnchor constant:-20],
+                                              [titleLabel.heightAnchor constraintEqualToConstant:44],
+                                              [titleLabel.centerYAnchor constraintEqualToAnchor:headerView.centerYAnchor]
+                                              ]
+     ];
+    
+    headerView.tag = section;
+    [headerView addGestureRecognizer:recognizer];
+
+    return headerView;
+}
+
+- (void)sectionTapped:(UITapGestureRecognizer *)recognizer {
+    Section *section = (Section *)self.sections[recognizer.view.tag];
+    if (section.expanded) {
+        section.expanded = NO;
+    }
+    else {
+        section.expanded = YES;
+    }
+    [self.table reloadData];
 }
 
 #pragma mark - ContactTableViewCellDelegate
