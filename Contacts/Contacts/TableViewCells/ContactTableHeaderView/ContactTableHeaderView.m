@@ -71,13 +71,13 @@
 
 - (void)setExpanded:(BOOL)expanded {
     if (expanded) {
-        self.arrowImage.image =[UIImage imageNamed:@"arrowDown"];
+        self.arrowImage.image = [UIImage imageNamed:@"arrowDown"];
         self.alphabetLabel.textColor = [UIColor blackColor];
         self.contactsAmountLabel.textColor = [UIColor grayColor];
         
     }
     else {
-        self.arrowImage.image =[UIImage imageNamed:@"arrowUp"];
+        self.arrowImage.image = [UIImage imageNamed:@"arrowUp"];
         self.alphabetLabel.textColor = [UIColor colorWithRed:0xD9/255.0f
                                                green:0x91/255.0f
                                                 blue:0x00/255.0f alpha:1];

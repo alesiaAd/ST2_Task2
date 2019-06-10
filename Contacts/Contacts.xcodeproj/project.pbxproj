@@ -109,13 +109,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F82C9AAB22AEBA71009A69E7 /* PhoneTableHeaderView */ = {
+		F82C9AAB22AEBA71009A69E7 /* ContactTableHeaderView */ = {
 			isa = PBXGroup;
 			children = (
 				F82C9AA822AEBA6A009A69E7 /* ContactTableHeaderView.h */,
 				F82C9AA922AEBA6A009A69E7 /* ContactTableHeaderView.m */,
 			);
-			path = PhoneTableHeaderView;
+			path = ContactTableHeaderView;
 			sourceTree = "<group>";
 		};
 		F8541D7622AA885200099870 = {
@@ -257,7 +257,7 @@
 		F8541DDA22ADB8BF00099870 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				F82C9AAB22AEBA71009A69E7 /* PhoneTableHeaderView */,
+				F82C9AAB22AEBA71009A69E7 /* ContactTableHeaderView */,
 				F8541DD022ADA8AD00099870 /* PhoneTableViewCell */,
 				F8541DD422ADA96D00099870 /* ContactsTableViewCell */,
 				F8541DD822ADABB200099870 /* PhotoAndNameTableViewCell */,
