@@ -89,7 +89,8 @@
          ];
     }
     
-    
+    [self.tableView setHidden:YES];
+    [self.warningView setHidden:YES];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
@@ -99,13 +100,12 @@
     self.contactsStore = [[CNContactStore alloc] init];
     self.contacts = [NSMutableArray new];
     [self fetchAllContacts];
-
-    self.sections = [self makeArrayOfSections:self.contacts];
 }
 
 - (void)fetchAllContacts {
     
     [self requestContactsAccessWithHandler:^(BOOL grandted) {
+        __weak __typeof__(self) weakSelf = self;
         
         if (grandted) {
             CNContactFetchRequest *request = [[CNContactFetchRequest alloc] initWithKeysToFetch:@[CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPhoneNumbersKey, CNContactImageDataKey]];
@@ -128,24 +128,27 @@
                 UIImage *image = [UIImage imageWithData:contact.imageData];
                 newContact.contactImage = image;
                 
-                [self.contacts addObject:newContact];
+                [weakSelf.contacts addObject:newContact];
+                
+                weakSelf.sections = [weakSelf makeArrayOfSections:self.contacts];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf.tableView reloadData];
+                });
             }];
         }
     }];
 }
 
 - (void)requestContactsAccessWithHandler:(void (^)(BOOL grandted))handler {
+    __weak __typeof__(self) weakSelf = self;
     
-    __block BOOL accessGranted = NO;
     switch ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts]) {
         case CNAuthorizationStatusAuthorized:
-            accessGranted = YES;
             [self.tableView setHidden:NO];
             [self.warningView setHidden:YES];
             handler(YES);
             break;
         case CNAuthorizationStatusDenied:{
-            accessGranted = NO;
             [self.tableView setHidden:YES];
             [self.warningView setHidden:NO];
             handler(NO);
@@ -153,14 +156,23 @@
         }
         case CNAuthorizationStatusNotDetermined:{
             [self.contactsStore requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError * _Nullable error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (granted) {
+                        [self.tableView setHidden:NO];
+                        [self.warningView setHidden:YES];
+                    }
+                    else {
+                        [self.tableView setHidden:YES];
+                        [self.warningView setHidden:NO];
+                    }
+                });
                 handler(granted);
             }];
             break;
         }
         case CNAuthorizationStatusRestricted:
-            accessGranted = NO;
-            [self.tableView setHidden:YES];
-            [self.warningView setHidden:NO];
+            [weakSelf.tableView setHidden:YES];
+            [weakSelf.warningView setHidden:NO];
             handler(NO);
             break;
     }
