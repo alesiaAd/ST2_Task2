@@ -24,6 +24,8 @@
     
     [self.tableView registerClass:[PhoneTableViewCell class] forCellReuseIdentifier:@"PhoneTableViewCell"];
     [self.tableView registerClass:[PhotoAndNameTableViewCell class] forCellReuseIdentifier:@"PhotoAndNameTableViewCell"];
+    
+    self.tableView.tableFooterView = [UIView new];
 }
 
 #pragma mark - DataSource

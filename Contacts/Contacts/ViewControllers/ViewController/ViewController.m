@@ -100,6 +100,7 @@
     self.contactsStore = [[CNContactStore alloc] init];
     self.contacts = [NSMutableArray new];
     [self fetchAllContacts];
+    self.tableView.tableFooterView = [UIView new];
 }
 
 - (void)fetchAllContacts {
@@ -130,7 +131,8 @@
                 
                 [weakSelf.contacts addObject:newContact];
                 
-                weakSelf.sections = [weakSelf makeArrayOfSections:self.contacts];
+                weakSelf.sections = [weakSelf makeArrayOfSections:weakSelf.contacts];
+                weakSelf.sections = [weakSelf sortArray:weakSelf.sections];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf.tableView reloadData];
                 });
@@ -183,10 +185,10 @@
     for (Contact *contact in array) {
         NSString *newKey = [NSString new];
         if (contact.lastName.length > 0 && [[NSCharacterSet letterCharacterSet] characterIsMember: [contact.lastName characterAtIndex:0]] == YES) {
-            newKey = [contact.lastName substringToIndex:1];
+            newKey = [[contact.lastName substringToIndex:1] uppercaseString];
         }
         else if (contact.firstName.length > 0 && [[NSCharacterSet letterCharacterSet] characterIsMember: [contact.firstName characterAtIndex:0]] == YES) {
-            newKey = [contact.firstName substringToIndex:1];
+            newKey = [[contact.firstName substringToIndex:1] uppercaseString];
         }
         else {
             newKey = @"#";
@@ -217,6 +219,38 @@
         }
     }
     return [arrayOfSections copy];
+}
+
+- (NSArray *)sortArray:(NSArray *)array {
+    NSArray *sorted = [array sortedArrayUsingComparator:^(id obj1, id obj2){
+        if ([obj1 isKindOfClass:[Section class]] && [obj2 isKindOfClass:[Section class]]) {
+            Section *section1 = obj1;
+            Section *section2 = obj2;
+            NSString *title1 = section1.title;
+            NSString *title2 = section2.title;
+            if ([title1 isEqualToString:@"#"]) {
+                return (NSComparisonResult)NSOrderedDescending;
+            }
+            else if ([title2 isEqualToString:@"#"]) {
+                return (NSComparisonResult)NSOrderedAscending;
+            }
+            else if ([self isEnglish:title1] && ![self isEnglish:title2]) {
+                return (NSComparisonResult)NSOrderedDescending;
+            }
+            else if (![self isEnglish:title1] && [self isEnglish:title2]) {
+                return (NSComparisonResult)NSOrderedAscending;
+            }
+            else {
+                return [title1 compare:title2 options:NSCaseInsensitiveSearch];
+            }
+        }
+        return (NSComparisonResult)NSOrderedSame;
+    }];
+    return sorted;
+}
+
+- (BOOL)isEnglish:(NSString *)string {
+    return ([string rangeOfCharacterFromSet:[[NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZ"] invertedSet]].location == NSNotFound);
 }
 
 #pragma mark - DataSource
@@ -339,7 +373,9 @@
             NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:recognizer.view.tag];
             [paths addObject:path];
         }
+        [self.tableView beginUpdates];
         [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView endUpdates];
         
     }
     else {
@@ -349,7 +385,9 @@
             NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:recognizer.view.tag];
             [paths addObject:path];
         }
+        [self.tableView beginUpdates];
         [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView endUpdates];
     }
 }
 
