@@ -36,6 +36,8 @@
         
         self.fullNameLabel = [UILabel new];
         [self.fullNameLabel sizeToFit];
+        [self.fullNameLabel setFont:[UIFont systemFontOfSize:23 weight:UIFontWeightMedium]];
+        self.fullNameLabel.textColor = [UIColor blackColor];
         [self addSubview:self.fullNameLabel];
         self.fullNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
         

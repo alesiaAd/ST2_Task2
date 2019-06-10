@@ -21,7 +21,14 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        [self.heightAnchor constraintEqualToConstant:70].active = YES;
+        self.layer.borderColor = [UIColor colorWithRed:0xDF/255.0f
+                                                 green:0xDF/255.0f
+                                                  blue:0xDF/255.0f alpha:1].CGColor;
+        
         self.phoneLabel = [UILabel new];
+        [self.phoneLabel setFont:[UIFont systemFontOfSize:17]];
+        self.phoneLabel.textColor = [UIColor blackColor];
         [self addSubview:self.phoneLabel];
         self.phoneLabel.translatesAutoresizingMaskIntoConstraints = NO;
         

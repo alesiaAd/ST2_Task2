@@ -26,10 +26,20 @@
     [super viewDidLoad];
     
     self.title = @"Контакты";
+    self.navigationController.navigationBar.titleTextAttributes = @{
+                                                                    NSFontAttributeName:[UIFont boldSystemFontOfSize:17],
+                                                                    NSForegroundColorAttributeName: [UIColor blackColor]
+                                                                    };
+    self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.layer.borderColor = [UIColor colorWithRed:0xE6/255.0f
+                                                                                green:0xE6/255.0f
+                                                                                 blue:0xE6/255.0f alpha:1].CGColor;
     
     
     self.warningView = [UIView new];
-    self.warningView.backgroundColor = [UIColor grayColor];
+    self.warningView.backgroundColor = [UIColor colorWithRed:0xF9/255.0f
+                                                       green:0xF9/255.0f
+                                                        blue:0xF9/255.0f alpha:1];
     [self.view addSubview:self.warningView];
     self.warningView.translatesAutoresizingMaskIntoConstraints = NO;
     
@@ -53,6 +63,7 @@
     
     UILabel *warningLabel = [UILabel new];
     warningLabel.textColor = [UIColor blackColor];
+    [warningLabel setFont:[UIFont systemFontOfSize:17]];
     warningLabel.numberOfLines = 0;
     [warningLabel sizeToFit];
     warningLabel.text = @"Доступ к списку контактов запрещен. Войдите в Settings и разрешите доступ.";
@@ -312,30 +323,47 @@
     Section *sect = (Section *)self.sections[section];
     
     UIView *headerView = [UIView new];
-    headerView.backgroundColor = [UIColor lightGrayColor];
+    headerView.backgroundColor = [UIColor colorWithRed:0xF9/255.0f
+                                                 green:0xF9/255.0f
+                                                  blue:0xF9/255.0f alpha:1];
+    headerView.layer.borderColor = [UIColor colorWithRed:0xDF/255.0f
+                                                   green:0xDF/255.0f
+                                                    blue:0xDF/255.0f alpha:1].CGColor;
+    [headerView.heightAnchor constraintEqualToConstant:60].active = YES;
     
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = sect.title;
+    [titleLabel setFont:[UIFont boldSystemFontOfSize:17]];
     titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [headerView addSubview:titleLabel];
     
     UILabel *contactsAmountLabel = [UILabel new];
     contactsAmountLabel.text = [NSString stringWithFormat:@"контактов: %lu", (unsigned long)sect.contacts.count];
+    [contactsAmountLabel setFont:[UIFont systemFontOfSize:17 weight:UIFontWeightLight]];
     contactsAmountLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [headerView addSubview:contactsAmountLabel];
     
     UIImageView *arrowImage =[UIImageView new];
     if (sect.expanded) {
         arrowImage.image =[UIImage imageNamed:@"arrowDown"];
+        titleLabel.textColor = [UIColor blackColor];
+        contactsAmountLabel.textColor = [UIColor grayColor];
+        
     }
     else {
         arrowImage.image =[UIImage imageNamed:@"arrowUp"];
+        titleLabel.textColor = [UIColor colorWithRed:0xD9/255.0f
+                                               green:0x91/255.0f
+                                                blue:0x00/255.0f alpha:1];
+        contactsAmountLabel.textColor = [UIColor colorWithRed:0xD9/255.0f
+                                                        green:0x91/255.0f
+                                                         blue:0x00/255.0f alpha:1];
     }
     arrowImage.translatesAutoresizingMaskIntoConstraints = NO;
     [headerView addSubview:arrowImage];
     
     [NSLayoutConstraint activateConstraints:@[
-                                              [titleLabel.leadingAnchor constraintEqualToAnchor:headerView.leadingAnchor constant:20],
+                                              [titleLabel.leadingAnchor constraintEqualToAnchor:headerView.leadingAnchor constant:25],
                                               [titleLabel.widthAnchor constraintEqualToConstant:20],
                                               [titleLabel.heightAnchor constraintEqualToConstant:44],
                                               [titleLabel.centerYAnchor constraintEqualToAnchor:headerView.centerYAnchor]
@@ -343,7 +371,7 @@
      ];
     
     [NSLayoutConstraint activateConstraints:@[
-                                              [contactsAmountLabel.leadingAnchor constraintEqualToAnchor:titleLabel.trailingAnchor constant:20],
+                                              [contactsAmountLabel.leadingAnchor constraintEqualToAnchor:titleLabel.trailingAnchor constant:10],
                                               [contactsAmountLabel.trailingAnchor constraintEqualToAnchor:arrowImage.leadingAnchor constant:-20],
                                               [contactsAmountLabel.heightAnchor constraintEqualToAnchor:titleLabel.heightAnchor multiplier:1],
                                               [contactsAmountLabel.centerYAnchor constraintEqualToAnchor:headerView.centerYAnchor]
@@ -376,7 +404,7 @@
         [self.tableView beginUpdates];
         [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
-        
+        [self.tableView reloadData];
     }
     else {
         section.expanded = YES;
@@ -388,6 +416,7 @@
         [self.tableView beginUpdates];
         [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
+        [self.tableView reloadData];
     }
 }
 
@@ -413,6 +442,10 @@
     deleteAction.backgroundColor = [UIColor redColor];
     return @[deleteAction];
     
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 70;
 }
 
 #pragma mark - ContactTableViewCellDelegate

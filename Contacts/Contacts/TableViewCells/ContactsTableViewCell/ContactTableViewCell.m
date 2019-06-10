@@ -12,6 +12,14 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    self.layer.borderColor = [UIColor colorWithRed:0xDF/255.0f
+                                             green:0xDF/255.0f
+                                              blue:0xDF/255.0f alpha:1].CGColor;
+    UIView *view =[UIView new];
+    view.backgroundColor = [UIColor colorWithRed:0xFE/255.0f
+                                           green:0xF6/255.0f
+                                            blue:0xF6/255.0f alpha:1];
+    self.selectedBackgroundView = view;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -19,7 +27,7 @@
 }
 
 - (void)displayContactInfo {
-    self.fullNameLabel.text = [NSString stringWithFormat:@"%@ %@", self.contact.firstName, self.contact.lastName];
+    self.fullNameLabel.text = [NSString stringWithFormat:@"%@ %@", self.contact.lastName, self.contact.firstName];
     self.infoIcon.image = [UIImage imageNamed:@"infoIcon"];
     self.infoIcon.userInteractionEnabled = YES;
     
