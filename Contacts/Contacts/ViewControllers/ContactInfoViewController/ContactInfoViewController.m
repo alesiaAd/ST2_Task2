@@ -19,6 +19,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.title = @"Контакты";
+    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
@@ -26,6 +28,20 @@
     [self.tableView registerClass:[PhotoAndNameTableViewCell class] forCellReuseIdentifier:@"PhotoAndNameTableViewCell"];
     
     self.tableView.tableFooterView = [UIView new];
+    
+    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *backBtnImage = [UIImage imageNamed:@"arrowLeft.png"];
+    [backBtn setBackgroundImage:backBtnImage forState:UIControlStateNormal];
+    [backBtn addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:backBtn] ;
+    self.navigationItem.leftBarButtonItem = backButton;
+    
+    [self.navigationItem.leftBarButtonItem.customView.widthAnchor constraintEqualToConstant:30].active = YES;
+    [self.navigationItem.leftBarButtonItem.customView.heightAnchor constraintEqualToConstant:30].active = YES;
+}
+
+- (void)goBack{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - DataSource
