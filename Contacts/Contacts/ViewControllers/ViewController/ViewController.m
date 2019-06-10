@@ -10,8 +10,9 @@
 #import "ContactTableViewCell.h"
 #import "ContactInfoViewController.h"
 #import "Section.h"
+#import "ContactTableHeaderView.h"
 
-@interface ViewController () <UITableViewDelegate, UITableViewDataSource, ContactTableViewCellDelegate>
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource, ContactTableViewCellDelegate, ContactTableHeaderViewDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIView *warningView;
@@ -107,6 +108,7 @@
     
     UINib *nib = [UINib nibWithNibName:@"ContactTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:@"ContactTableViewCell"];
+    [self.tableView registerClass:ContactTableHeaderView.class forHeaderFooterViewReuseIdentifier:@"ContactTableHeaderView"];
     
     self.contactsStore = [[CNContactStore alloc] init];
     self.contacts = [NSMutableArray new];
@@ -301,123 +303,51 @@
 
 #pragma mark - Delegate
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    Section *sect = (Section *)self.sections[section];
-    return sect.title;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Section *section = (Section *)self.sections[indexPath.section];
     Contact *contact = section.contacts[indexPath.row];
     
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Alert" message:[NSString stringWithFormat:@"Контакт %@ %@, номер телефона %@", contact.firstName, contact.lastName, contact.phoneNumbers[0]] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Alert" message:[NSString stringWithFormat:@"Контакт %@ %@, номер телефона %@", contact.firstName, contact.lastName, contact.phoneNumbers.count > 0 ? contact.phoneNumbers[0] : @""] preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:nil];
     [alert addAction:okAction];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sectionTapped:)];
+    static NSString *headerIdentifier = @"ContactTableHeaderView";
+    
+    ContactTableHeaderView *headerView = (ContactTableHeaderView *)[self.tableView dequeueReusableHeaderFooterViewWithIdentifier:headerIdentifier];
+    
+    if (headerView == nil) {
+        headerView = [[ContactTableHeaderView alloc] initWithReuseIdentifier:headerIdentifier];
+    }
     
     Section *sect = (Section *)self.sections[section];
-    
-    UIView *headerView = [UIView new];
-    headerView.backgroundColor = [UIColor colorWithRed:0xF9/255.0f
-                                                 green:0xF9/255.0f
-                                                  blue:0xF9/255.0f alpha:1];
-    headerView.layer.borderColor = [UIColor colorWithRed:0xDF/255.0f
-                                                   green:0xDF/255.0f
-                                                    blue:0xDF/255.0f alpha:1].CGColor;
-    [headerView.heightAnchor constraintEqualToConstant:60].active = YES;
-    
-    UILabel *titleLabel = [UILabel new];
-    titleLabel.text = sect.title;
-    [titleLabel setFont:[UIFont boldSystemFontOfSize:17]];
-    titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [headerView addSubview:titleLabel];
-    
-    UILabel *contactsAmountLabel = [UILabel new];
-    contactsAmountLabel.text = [NSString stringWithFormat:@"контактов: %lu", (unsigned long)sect.contacts.count];
-    [contactsAmountLabel setFont:[UIFont systemFontOfSize:17 weight:UIFontWeightLight]];
-    contactsAmountLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [headerView addSubview:contactsAmountLabel];
-    
-    UIImageView *arrowImage =[UIImageView new];
-    if (sect.expanded) {
-        arrowImage.image =[UIImage imageNamed:@"arrowDown"];
-        titleLabel.textColor = [UIColor blackColor];
-        contactsAmountLabel.textColor = [UIColor grayColor];
-        
-    }
-    else {
-        arrowImage.image =[UIImage imageNamed:@"arrowUp"];
-        titleLabel.textColor = [UIColor colorWithRed:0xD9/255.0f
-                                               green:0x91/255.0f
-                                                blue:0x00/255.0f alpha:1];
-        contactsAmountLabel.textColor = [UIColor colorWithRed:0xD9/255.0f
-                                                        green:0x91/255.0f
-                                                         blue:0x00/255.0f alpha:1];
-    }
-    arrowImage.translatesAutoresizingMaskIntoConstraints = NO;
-    [headerView addSubview:arrowImage];
-    
-    [NSLayoutConstraint activateConstraints:@[
-                                              [titleLabel.leadingAnchor constraintEqualToAnchor:headerView.leadingAnchor constant:25],
-                                              [titleLabel.widthAnchor constraintEqualToConstant:20],
-                                              [titleLabel.heightAnchor constraintEqualToConstant:44],
-                                              [titleLabel.centerYAnchor constraintEqualToAnchor:headerView.centerYAnchor]
-                                              ]
-     ];
-    
-    [NSLayoutConstraint activateConstraints:@[
-                                              [contactsAmountLabel.leadingAnchor constraintEqualToAnchor:titleLabel.trailingAnchor constant:10],
-                                              [contactsAmountLabel.trailingAnchor constraintEqualToAnchor:arrowImage.leadingAnchor constant:-20],
-                                              [contactsAmountLabel.heightAnchor constraintEqualToAnchor:titleLabel.heightAnchor multiplier:1],
-                                              [contactsAmountLabel.centerYAnchor constraintEqualToAnchor:headerView.centerYAnchor]
-                                              ]
-     ];
-    
-    [NSLayoutConstraint activateConstraints:@[
-                                              [arrowImage.trailingAnchor constraintEqualToAnchor:headerView.trailingAnchor constant:-20],
-                                              [arrowImage.heightAnchor constraintEqualToConstant:20],
-                                              [arrowImage.widthAnchor constraintEqualToAnchor:arrowImage.heightAnchor multiplier:1],
-                                              [arrowImage.centerYAnchor constraintEqualToAnchor:headerView.centerYAnchor]
-                                              ]
-     ];
-    
-    headerView.tag = section;
-    [headerView addGestureRecognizer:recognizer];
+    headerView.section = sect;
+    headerView.delegate = self;
 
     return headerView;
 }
 
-- (void)sectionTapped:(UITapGestureRecognizer *)recognizer {
-    Section *section = (Section *)self.sections[recognizer.view.tag];
+- (void)didTapOnHeader:(ContactTableHeaderView *)header {
+    Section *section = header.section;
+    NSInteger sectionIndex = [self.sections indexOfObject:section];
+    section.expanded = !section.expanded;
+    
+    NSMutableArray *paths = [NSMutableArray array];
+    for (NSInteger i = 0; i < section.contacts.count; i++) {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:sectionIndex];
+        [paths addObject:path];
+    }
+    [self.tableView beginUpdates];
     if (section.expanded) {
-        section.expanded = NO;
-        NSMutableArray *paths = [NSMutableArray array];
-        for (NSInteger i = 0; i < section.contacts.count; i++) {
-            NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:recognizer.view.tag];
-            [paths addObject:path];
-        }
-        [self.tableView beginUpdates];
-        [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.tableView endUpdates];
-        [self.tableView reloadData];
-    }
-    else {
-        section.expanded = YES;
-        NSMutableArray *paths = [NSMutableArray array];
-        for (NSInteger i = 0; i < section.contacts.count; i++) {
-            NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:recognizer.view.tag];
-            [paths addObject:path];
-        }
-        [self.tableView beginUpdates];
         [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.tableView endUpdates];
-        [self.tableView reloadData];
+    } else {
+        [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+    [self.tableView endUpdates];
+    
+    [header setExpanded:section.expanded];
 }
 
 - (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath  API_AVAILABLE(ios(11.0)){

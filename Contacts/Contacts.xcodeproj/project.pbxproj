@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F82BD4AB22AE2A9A00B88E0C /* ContactInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F82BD4A822AE2A9A00B88E0C /* ContactInfoViewController.xib */; };
 		F82BD4AC22AE2A9A00B88E0C /* ContactInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F82BD4AA22AE2A9A00B88E0C /* ContactInfoViewController.m */; };
+		F82C9AAA22AEBA6A009A69E7 /* ContactTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F82C9AA922AEBA6A009A69E7 /* ContactTableHeaderView.m */; };
 		F8541D8422AA885200099870 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F8541D8322AA885200099870 /* AppDelegate.m */; };
 		F8541D8722AA885200099870 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8541D8622AA885200099870 /* ViewController.m */; };
 		F8541D8A22AA885300099870 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8541D8822AA885300099870 /* Main.storyboard */; };
@@ -49,6 +50,8 @@
 		F82BD4A922AE2A9A00B88E0C /* ContactInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactInfoViewController.h; sourceTree = "<group>"; };
 		F82BD4AA22AE2A9A00B88E0C /* ContactInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactInfoViewController.m; sourceTree = "<group>"; };
 		F82BD4B322AE2C5F00B88E0C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Contacts/Info.plist; sourceTree = SOURCE_ROOT; };
+		F82C9AA822AEBA6A009A69E7 /* ContactTableHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableHeaderView.h; sourceTree = "<group>"; };
+		F82C9AA922AEBA6A009A69E7 /* ContactTableHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableHeaderView.m; sourceTree = "<group>"; };
 		F8541D7F22AA885200099870 /* Contacts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Contacts.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8541D8222AA885200099870 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F8541D8322AA885200099870 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -106,6 +109,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F82C9AAB22AEBA71009A69E7 /* PhoneTableHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				F82C9AA822AEBA6A009A69E7 /* ContactTableHeaderView.h */,
+				F82C9AA922AEBA6A009A69E7 /* ContactTableHeaderView.m */,
+			);
+			path = PhoneTableHeaderView;
+			sourceTree = "<group>";
+		};
 		F8541D7622AA885200099870 = {
 			isa = PBXGroup;
 			children = (
@@ -245,6 +257,7 @@
 		F8541DDA22ADB8BF00099870 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				F82C9AAB22AEBA71009A69E7 /* PhoneTableHeaderView */,
 				F8541DD022ADA8AD00099870 /* PhoneTableViewCell */,
 				F8541DD422ADA96D00099870 /* ContactsTableViewCell */,
 				F8541DD822ADABB200099870 /* PhotoAndNameTableViewCell */,
@@ -411,6 +424,7 @@
 				F8541DC222ABC7C400099870 /* ContactTableViewCell.m in Sources */,
 				F82BD4AC22AE2A9A00B88E0C /* ContactInfoViewController.m in Sources */,
 				F8541DCB22ACFB2600099870 /* PhoneTableViewCell.m in Sources */,
+				F82C9AAA22AEBA6A009A69E7 /* ContactTableHeaderView.m in Sources */,
 				F8541D9222AA885400099870 /* main.m in Sources */,
 				F8541D8422AA885200099870 /* AppDelegate.m in Sources */,
 			);
