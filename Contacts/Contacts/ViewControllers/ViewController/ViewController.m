@@ -391,16 +391,28 @@
     }
 }
 
-- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath  API_AVAILABLE(ios(11.0)){
     UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"Delete" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
         Section *section = (Section *)self.sections[indexPath.section];
         [section.contacts removeObjectAtIndex:indexPath.row];
         [self.tableView reloadData];
     }];
-    
+
     UISwipeActionsConfiguration *configuraion = [UISwipeActionsConfiguration configurationWithActions:@[deleteAction]];
     configuraion.performsFirstActionWithFullSwipe = NO;
     return configuraion;
+}
+
+-(NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Delete" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        Section *section = (Section *)self.sections[indexPath.section];
+        [section.contacts removeObjectAtIndex:indexPath.row];
+        [self.tableView reloadData];
+    }];
+    deleteAction.backgroundColor = [UIColor redColor];
+    return @[deleteAction];
+    
 }
 
 #pragma mark - ContactTableViewCellDelegate
